@@ -10,10 +10,18 @@ exporters:
     endpoint: "0.0.0.0:8889"
     resource_to_telemetry_conversion:
       enabled: true
-  otlphttp/seq:
-    endpoint: "http://seq:5341/ingest/otlp"
-    tls:
-      insecure: true
+  # otlphttp/seq:
+  #   endpoint: "http://seq:5341/ingest/otlp"
+  #   tls:
+  #     insecure: true
+  # file:
+  #   path: /otel-logs/data.json
+  file/test-out:
+    rotation:
+      max_megabytes: 1
+    path: ./logs/test.json
+    flush_interval: 1s
+  
 
 service:
   pipelines:
@@ -22,5 +30,5 @@ service:
       exporters: [logging, prometheus]
     logs:
       receivers: [otlp]
-      exporters: [logging, otlphttp/seq]
+      exporters: [logging, file/test-out]
      
