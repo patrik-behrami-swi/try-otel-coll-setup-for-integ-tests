@@ -16,11 +16,13 @@ exporters:
   #     insecure: true
   # file:
   #   path: /otel-logs/data.json
-  file/test-out:
-    rotation:
-      max_megabytes: 1
-    path: ./logs/test.json
-    flush_interval: 1s
+  # file/test-out:
+  #   rotation:
+  #     max_megabytes: 1
+  #   path: ./logs/test.json
+  #   flush_interval: 1s
+  file: 
+    path: /data/logs/logging.json
   
 
 service:
@@ -30,5 +32,5 @@ service:
       exporters: [logging, prometheus]
     logs:
       receivers: [otlp]
-      exporters: [logging, file/test-out]
+      exporters: [logging, file]
      

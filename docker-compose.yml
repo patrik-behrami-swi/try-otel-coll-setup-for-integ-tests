@@ -2,7 +2,8 @@ version: "2"
 services:
 
   # Collector
-  otel-collector:
+  # otel-collector:
+  my-otel:
     image: otel/opentelemetry-collector
     restart: always
     command: [ "--config=/etc/otel-collector-config.yaml" ]
@@ -10,7 +11,7 @@ services:
       - "C:\\repos\\_try_otel\\otel-local-config.yaml:/etc/otel-collector-config.yaml"
       # - "C:\\repos\\_try_otel\\logs:/etc/logs.json"
       # - "C:\\repos\\_try_otel\\logs\\logs.json:/data/logs.json"
-      # - "C:\\repos\\_try_otel\\logs:/otel/logs"
+      - "C:\\repos\\_try_otel\\logs:/data/logs"
     ports:
       # - "8888:8888"   # Prometheus metrics exposed by the collector
       - "8889:8889"   # Prometheus exporter metrics
@@ -26,5 +27,5 @@ services:
     ports:
       - "9090:9090"
 
-volumes:
-  loggerVol:
+# volumes:
+#   loggerVol:
