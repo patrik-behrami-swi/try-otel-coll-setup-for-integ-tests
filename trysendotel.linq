@@ -50,6 +50,8 @@ void Main()
 	.Build();
 
 	var metricsClient = host.Services.GetService<MetricsService.MetricsServiceClient>();
+	metricsClient.Dump();
+
 
 	ExportMetricsServiceRequest req = new ExportMetricsServiceRequest(){
 		

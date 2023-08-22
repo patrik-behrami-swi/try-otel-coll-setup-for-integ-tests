@@ -69,8 +69,10 @@
   <Reference Relative="..\nighthawk-nim\SOC\tools\SolarWinds.SOC.DataPusher\bin\Debug\net6.0\System.Linq.Async.dll">C:\repos\nighthawk-nim\SOC\tools\SolarWinds.SOC.DataPusher\bin\Debug\net6.0\System.Linq.Async.dll</Reference>
   <Reference Relative="..\nighthawk-nim\SOC\tools\SolarWinds.SOC.DataPusher\bin\Debug\net6.0\System.Text.Encodings.Web.dll">C:\repos\nighthawk-nim\SOC\tools\SolarWinds.SOC.DataPusher\bin\Debug\net6.0\System.Text.Encodings.Web.dll</Reference>
   <Reference Relative="..\nighthawk-nim\SOC\tools\SolarWinds.SOC.DataPusher\bin\Debug\net6.0\System.Text.Json.dll">C:\repos\nighthawk-nim\SOC\tools\SolarWinds.SOC.DataPusher\bin\Debug\net6.0\System.Text.Json.dll</Reference>
-  <Namespace>Microsoft.Extensions.Hosting</Namespace>
   <Namespace>Microsoft.Extensions.DependencyInjection</Namespace>
+  <Namespace>Microsoft.Extensions.Hosting</Namespace>
+  <Namespace>Microsoft.Extensions.Options</Namespace>
+  <Namespace>Opentelemetry.Proto.Collector.Metrics.V1</Namespace>
   <Namespace>Opentelemetry.Proto.Collector.Logs.V1</Namespace>
 </Query>
 
@@ -80,41 +82,75 @@ using Opentelemetry.Proto.Common.V1;
 using Opentelemetry.Proto.Resource.V1;
 using Opentelemetry.Proto.Logs.V1;
 
-void Main()
+
+async void Main()
 {
-	using IHost host = Host.CreateDefaultBuilder()
+	
+
+	using Microsoft.Extensions.Hosting.IHost host = Host.CreateDefaultBuilder()
 	.ConfigureServices((_, services) =>
 	{
 		//services
 		//	.AddSingleton<MetricsService.MetricsServiceClient>())
-		services.AddGrpcClient<MetricsService.MetricsServiceClient>((serviceProvider, options) =>
-				{
-					options.Address = new Uri($"http://localhost:55681");
-				});
 
 		services.AddGrpcClient<LogsService.LogsServiceClient>((serviceProvider, options) =>
 				{
 					options.Address = new Uri($"http://localhost:4137");
 				});
 
-		
 
 	})
 	.Build();
 
-	var metricsClient = host.Services.GetService<MetricsService.MetricsServiceClient>();
 
-	ExportMetricsServiceRequest req = new ExportMetricsServiceRequest()
-	{
+	
+		var logsClinet = host.Services.GetService<LogsService.LogsServiceClient>();
 
-	};
+	logsClinet.Dump();
+//
+//	LogRecord @event = new()
+//	{
+//		Attributes =
+//			{
+//				new KeyValue
+//				{
+//					Key = "my-hello",
+//					Value = new AnyValue { StringValue = "aaaa" }
+//				},
+//			},
+//		TimeUnixNano = UnixTime(),
+//
+//	};
+//
+//
+//	ExportLogsServiceRequest message = new ExportLogsServiceRequest
+//	{
+//		ResourceLogs =
+//			{
+//				new ResourceLogs
+//				{
+//					ScopeLogs =
+//					{
+//						new ScopeLogs
+//						{
+//							LogRecords = { @event }
+//						}
+//					}
+//				}
+//			}
+//	};
+//	
+//	var res = await logsClinet.ExportAsync(message);
+//	
+//	"DONE".Dump();
+//	res.Dump();
 
-	var resourceMetrics = new ResourceMetrics();
+}
 
-
-
-
-
+ulong UnixTime()
+{
+	DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+	return (ulong)(DateTime.UtcNow - epochStart).Ticks * 100;
 }
 
 // You can define other methods, fields, classes and namespaces here
