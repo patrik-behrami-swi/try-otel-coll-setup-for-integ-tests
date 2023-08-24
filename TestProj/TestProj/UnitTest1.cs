@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestProj
 {
@@ -30,42 +31,22 @@ namespace TestProj
                 //var aa = JsonDocument.Parse(ee);
 
             });
-            multiplatformFileWatcher.Changed += new FileSystemEventHandler((s, e) =>
+            multiplatformFileWatcher.Changed += new FileSystemEventHandler(async (s, e) =>
             {
                 Console.WriteLine("CHANGED");
-                var ee = File.ReadAllText("logging.json");
-                var jsonn = JsonDocument.Parse(ee);
+                try { 
+                    var ee = await File.ReadAllTextAsync(e.FullPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                //var jsonn = JsonDocument.Parse(ee);
 
             });
 
-            //var thread = new Thread(() => multiplatformFileWatcher.WatchForFileChangesAsync(default(CancellationToken)));
-            //thread.Start();
-
-            //var watcher = new FileSystemWatcher("eventLogs");
-            //watcher.Changed += (s, e) =>
-            //{
-            //    Console.WriteLine("CHANGED");
-            //};
-
-            //watcher.Created += (s, e) =>
-            //{
-            //    Console.WriteLine("CREATED");
-            //};
-
-
-            //while (true)
-            //{
-            //    for (int i = 0; i < 1000000000; i++)
-            //    {
-            //        Thread.Sleep(1);
-            //    }
-            //}
-
-
-
-            //var ee = File.ReadAllText("logging.json");
-
-            //var aa = JsonDocument.Parse(ee);
+            Task task = new Task(() => multiplatformFileWatcher.WatchForFileChangesAsync(default(CancellationToken)));
+            task.Start();
 
             int i = 0;
 
@@ -76,7 +57,7 @@ namespace TestProj
                 }
 
                 i++;
-                //Console.WriteLine("HELLO");
+                Console.WriteLine("HELLO");
                 Trace.Flush();
                 Thread.Sleep(5000);
             }

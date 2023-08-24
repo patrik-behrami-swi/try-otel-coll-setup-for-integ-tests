@@ -23,7 +23,7 @@ exporters:
   #   flush_interval: 1s
   file: 
     path: /data/logs/logging.json
-    flush_interval: 3s
+    flush_interval: 5s
   
 
 service:

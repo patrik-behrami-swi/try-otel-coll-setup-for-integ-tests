@@ -44,7 +44,6 @@ namespace testingproject
 
             _watcher.IncludeSubdirectories = true;
             _watcher.EnableRaisingEvents = true;
-            //_watcher.BeginInit();
         }
 
         [OneTimeTearDown]

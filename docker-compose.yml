@@ -4,7 +4,7 @@ services:
   # Collector
   # otel-collector:
   my-otel:
-    image: otel/opentelemetry-collector
+    image: my-otel
     restart: always
     command: [ "--config=/etc/otel-collector-config.yaml" ]
     volumes:
